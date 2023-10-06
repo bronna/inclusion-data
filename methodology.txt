@@ -1,0 +1,49 @@
+# METHODOLOGY
+
+1. Downloaded state metrics data as a csv on Sep 26, 2023 from https://www.ode.state.or.us/data/reportcard/media.aspx by clicking on 'SPED District Media File' for the 2021-2022 School Year
+
+2. Downloaded TIGER/Line Shapefiles for Oregon's year 2022 school districts from https://www.census.gov/cgi-bin/geo/shapefiles/index.php?year=2022&layergroup=School+Districts. Downloaded on Sep 26, 2023. Downloaded Elementary, Secondary, and Unified SD files
+
+3. Put all data files in 'original files' directory
+
+4. Duplicated all original files to use for analysis
+
+5. Loaded all three district .shp files into QGIS: Layer -> Add Layer -> Add Vector Layer
+
+6. Merged and exported all three district .shp files: 'Merge vector layers'
+
+7. Exported merged file to GeoJSON: right click on layer -> 'Export' -> 'Save Features As...' -> 'GeoJSON'
+
+8. Using CLI, installed TopoJSON tools in data folder: npm install -g topojson-server topojson-client topojson-simplify
+
+9. Converted GeoJSON file to TopoJSON: geo2topo input.geojson > output.topojson
+
+10. Simplified the geo paths: topoquantize 1e5 < OR_SDs_merged.topojson | toposimplify -p 1e-5 > OR_SDs_simplified.topojson
+
+11. Visually compared and checked the merged and simplified files using mapshaper: https://mapshaper.org/
+
+12. Created Jupyter notebook in directory: jupyter notebook -> +new Python 3
+
+13. Loaded in state data and federal geo data. Removed "SD" and "School District" from name columns in datasets to standardize naming. Joined the datasets
+
+14. Found 30 non-matching entries in the federal data and and 29 non-matching entries in the state data
+
+15. Manually matched up non-matching entries, using the state data's 'Institution Name' as the key identifier of a district
+
+16. Calculated 'LRE Students >40% <80%' category. Converted 'Institution ID' and 'geometry_index' floats to integers, converted all '*' values to null. Dropped undefined districts. Sorted districts by alphabetical order
+
+17. Exported the cleaned and formatted data as topojson: oregon_data.topojson
+
+18. Imported the data into the frontend app with a .topojson extension. Changed the extension to .json
+
+
+
+
+
+
+
+
+
+
+
+
