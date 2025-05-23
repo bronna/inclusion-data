@@ -102,6 +102,50 @@
 3. Uncommented the relevant properties in the topo_data update section of the notebook to ensure these new indicators are included in the final output.
 
 
+-----------------------------
+2023 TO 2024 DATA
 
+1. Downloaded state special education metrics data as a csv on May 22, 2025 from https://www.ode.state.or.us/data/ReportCard/Media by clicking on 'SPED District Media File' for the 2023-2024 school year. Moved to 'original files' '2023to24' directory
 
+2 Downloaded state gen ed data files on May 22, 2025 from same website for same school year. 'AAG Districts-Aggregated' for the gen ed enrollment. 'AAG Districts-Disaggregated' for the 5 year grad rates of students with disabilities. Moved to 'original files' '2023to24' directory
+
+3. Downloaded TIGER/Line Shapefiles as .zip files for Oregon's year 2024 school districts from https://www.census.gov/cgi-bin/geo/shapefiles/index.php?year=2024&layergroup=School+Districts. Downloaded on May 22, 2025. Downloaded Elementary, Secondary, and Unified SD files
+
+4. Unzipped and moved the geo data files to the 'original files' '2023to24' directory
+
+5. Duplicated all original files into '23to24' directory to use for analysis
+
+6. Loaded all three district .shp files into QGIS: Layer -> Add Layer -> Add Vector Layer
+
+7. Merged and exported all three district .shp files: Processing Toolbox on left -> search bar -> 'Merge vector layers'
+
+8. Exported merged file to OR_SDs_merged_24: right click on layer -> 'Export' -> 'Save Features As...' -> 'GeoJSON'
+
+9. Using CLI, installed TopoJSON tools in data folder: npm install -g topojson-server topojson-client topojson-simplify
+
+10. Converted GeoJSON file to TopoJSON: geo2topo OR_SDs_merged_24.geojson > OR_SDs_merged_24.topojson
+
+11. Simplified the geo paths: topoquantize 1e5 < OR_SDs_merged_24.topojson | toposimplify -p 1e-5 > OR_SDs_simplified_24.topojson
+
+12. Visually compared and checked the merged and simplified files using mapshaper: https://mapshaper.org/
+
+13. Duplicated last year's 'StateFedDataMergeOregon23.ipynb' Jupyter notebook and added to '23to24' directory. Changed name to 'StateFedDataMergeOregon24.ipynb'. Opened jupyter notebook through CLI: 'jupyter notebook'
+
+14. In notebook: Modifed names and uploaded gen ed data files
+
+15. SpEdMediaDistrict.csv is missing the disproportionate indicators, same as last year. Will email ODE to try to obtain those values again. In notebook: Commented out notebook cells referencing 'disproportionate_data'
+
+16. In notebook: Modified file names and loaded in state data and simplified federal geo data. Removed "SD" and "School District" from name columns in datasets to standardize naming. Joined all datasets
+
+17. In notebook: Found 30 non-matching entries in the federal data and and 29 non-matching entries in the state data
+
+18. In notebook: Manually matched up non-matching entries, using the state data's 'Institution Name' as the key identifier of a district. Had to modify a couple of the manually matched districts from last year to updated SD names (next year try fuzzy matching?)
+
+19. Had to modify changes in column names from last year to this year for Grad and Dropout Rates
+
+20. In notebook: Calculated 'LRE Students >40% <80%' category. Converted 'Institution ID' and 'geometry_index' floats to integers, converted all '*' values to null. Dropped undefined districts. Sorted districts by alphabetical order
+
+21. Exported the cleaned and formatted data as topojson: oregon_data_24.topojson
+
+22. Imported the data into the javascript frontend with a .topojson extension. Changed the extension to .json
 
