@@ -149,3 +149,20 @@
 
 22. Imported the data into the javascript frontend with a .topojson extension. Changed the extension to .json
 
+
+-----------------------------
+2025-06-09: ADDED DISPROPORTIONATE REPRESENTATION INDICATORS for 23/24 SY
+
+1. Obtained the missing indicators from ODE via email and renamed to "ODE_DisproportionateIndicators__20232024.xlsx"
+
+2. Opened the .xlxs in Numbers and exported as a csv: "ODE_DisproportionateIndicators__20232024.csv"
+
+3. Opened the .csv in VSCode and deleted the header rows
+
+4. Modified the data processing pipeline in StateFedDataMergeOregon23.ipynb to:
+   - Load the new CSV file
+   - Clean and rename columns for the four indicators (SuspExplFg, SuspExplRaceEthnicityFg, DisPrptnRprsntnFg, DisPrptnRprsntnDsbltyFg)
+   - Merge this data with existing district data using Institution ID as the key
+   - Include these indicators in the final TopoJSON output as Yes/No values for each district
+
+5. Uncommented the relevant properties in the topo_data update section of the notebook to ensure these new indicators are included in the final output.
